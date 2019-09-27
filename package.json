@@ -1,0 +1,32 @@
+{
+  "name": "goldenlayout-react-rortals",
+  "version": "1.0.0",
+  "description": "https://github.com/golden-layout/golden-layout/issues/392#issuecomment-384731510",
+  "keywords": [
+    "golden-layout"
+  ],
+  "main": "src/index.js",
+  "dependencies": {
+    "@elastic/elasticsearch": "^7.1.0",
+    "@elastic/react-search-ui": "^1.2.0",
+    "@elastic/search-ui-app-search-connector": "^1.2.0",
+    "golden-layout": "1.5.9",
+    "jquery": "3.3.1",
+    "moment": "^2.24.0",
+    "react": "16.3.2",
+    "react-dom": "16.3.2",
+    "react-elasticsearch": "^2.0.0",
+    "react-scripts": "1.1.4"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.6",
+    "babel-preset-react": "^6.24.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
