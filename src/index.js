@@ -1,11 +1,16 @@
 import React from "react";
+import ReactDOM from 'react-dom';
 import { render } from "react-dom";
 import { GoldenLayoutComponent } from "./layout/goldenLayoutComponent";
 import { MyGoldenPanel } from "./layout/myGoldenPanel";
 import { AppContext } from "./layout/appContext";
 
-import $ from 'jquery'
+// API
 import testES from "./api/test";
+
+// Component
+import CheckboxComponent from "./component/checkbox"
+import ResultComponent from "./component/result"
 
 class App extends React.Component {
   state = { contextValue: "default value" };
@@ -13,7 +18,20 @@ class App extends React.Component {
   // Test code
   componentDidMount(){
     testES().then(function(response){
-      $("#test-id").val(response.result.body.hits.hits[0]._source.Title)
+      ReactDOM.render(
+        <div>
+          <h3 className="text-left ml-3">Years</h3>
+          <CheckboxComponent className="ml-5" name={response.result.body.hits.hits[0]._source.Title} number={10} />
+        </div>
+        , document.getElementById('filter-panel')
+      )
+      ReactDOM.render(
+        <div>
+          <h3 className="text-left ml-3">Result</h3>
+          <ResultComponent className="ml-5" data={"IGOOONAMAKKKEKEK"}/>
+        </div>
+        , document.getElementById('result-panel')
+      )
     })
   }
 
@@ -43,15 +61,18 @@ class App extends React.Component {
                   type: "row",
                   content: [
                     {
-                      title: "A react component",
+                      title: "Filter",
                       type: "react-component",
                       component: "testItem",
-                      props: { value: "left one" }
+                      width: 20,
+                      props: { id: "filter-panel", className: "mt-5" }
                     },
                     {
-                      title: "Another react component",
+                      title: "Result",
                       type: "react-component",
-                      component: "testItem"
+                      component: "testItem",
+                      width: 80,
+                      props: { id: "result-panel", className: "mt-5" }
                     }
                   ]
                 }
