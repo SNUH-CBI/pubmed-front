@@ -6,7 +6,7 @@ import { MyGoldenPanel } from "./layout/myGoldenPanel";
 import { AppContext } from "./layout/appContext";
 
 // API
-import testES from "./api/test";
+import basicSearch from "./api/basic-search";
 
 // Component
 import CheckboxComponent from "./component/checkbox"
@@ -17,11 +17,29 @@ class App extends React.Component {
 
   // Test code
   componentDidMount(){
-    testES().then(function(response){
+    basicSearch("high blood pressure").then(function(response){
+      console.log(response)
+      if (!response.success){
+        alert(response.result.error)
+        return
+      }
+      let srch_result = response.result.body.hits.hits
+      let aggr_result = response.result.body.aggregations.group_by_state.buckets
       ReactDOM.render(
         <div>
           <h3 className="text-left ml-3">Years</h3>
-          <CheckboxComponent className="ml-5" name={response.result.body.hits.hits[0]._source.Title} number={10} />
+          {
+            aggr_result.map((value, index) => {
+              return (
+                <CheckboxComponent
+                  className="ml-5"
+                  name={value.key}
+                  number={value.doc_count}
+                  id={"checkbox" + index}
+                />
+              )
+            })
+          }
         </div>
         , document.getElementById('filter-panel')
       )
