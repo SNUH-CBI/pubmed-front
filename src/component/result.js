@@ -1,6 +1,7 @@
 import React from 'react';
 
 export default class ResultComponent extends React.Component{
+  // TODO: change style
   state = {
     title: this.props.data.Title,
     Article: this.props.data.ArticleTitle,

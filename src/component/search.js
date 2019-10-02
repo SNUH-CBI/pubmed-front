@@ -25,7 +25,7 @@ export default class SearchComponent extends React.Component{
   handleSubmit(event) {
     event.preventDefault()
     $("#overlay").show()
-    // TODO : change jquery style into React.Component
+    // TODO: change jquery style into React.Component
     ReactDOM.unmountComponentAtNode(document.getElementById('filter-panel'))
     ReactDOM.unmountComponentAtNode(document.getElementById('result-panel'))
     basicSearch(this.state.value).then(function(response){

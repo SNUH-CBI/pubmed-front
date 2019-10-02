@@ -1,6 +1,7 @@
 import React from 'react';
 
 export default class CheckboxComponent extends React.Component{
+  // TODO: change checkbox to history graph
   render(){
     return (
       <div className={this.props.className + " custom-control custom-checkbox"}>
