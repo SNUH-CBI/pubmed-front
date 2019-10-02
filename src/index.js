@@ -1,56 +1,15 @@
 import React from "react";
-import ReactDOM from 'react-dom';
 import { render } from "react-dom";
 import { GoldenLayoutComponent } from "./layout/goldenLayoutComponent";
 import { MyGoldenPanel } from "./layout/myGoldenPanel";
 import { AppContext } from "./layout/appContext";
+import $ from "jquery"
 
-// API
-import basicSearch from "./api/basic-search";
-
-// Component
-import CheckboxComponent from "./component/checkbox"
-import ResultComponent from "./component/result"
+import SearchComponent from "./component/search"
 
 class App extends React.Component {
-  state = { contextValue: "default value" };
-
-  // Test code
   componentDidMount(){
-    basicSearch("high blood pressure").then(function(response){
-      console.log(response)
-      if (!response.success){
-        alert(response.result.error)
-        return
-      }
-      let srch_result = response.result.body.hits.hits
-      let aggr_result = response.result.body.aggregations.group_by_state.buckets
-      ReactDOM.render(
-        <div>
-          <h3 className="text-left ml-3">Years</h3>
-          {
-            aggr_result.map((value, index) => {
-              return (
-                <CheckboxComponent
-                  className="ml-5"
-                  name={value.key}
-                  number={value.doc_count}
-                  id={"checkbox" + index}
-                />
-              )
-            })
-          }
-        </div>
-        , document.getElementById('filter-panel')
-      )
-      ReactDOM.render(
-        <div>
-          <h3 className="text-left ml-3">Result</h3>
-          <ResultComponent className="ml-5" data={"IGOOONAMAKKKEKEK"}/>
-        </div>
-        , document.getElementById('result-panel')
-      )
-    })
+    $("#overlay").hide()
   }
 
   render() {
@@ -59,18 +18,10 @@ class App extends React.Component {
         <nav className="navbar navbar-expand-lg navbar-dark blue lighten-2 mb-4">
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <a className="navbar-brand" href="/">Pubmed search</a>
-            <form className="form-inline mr-auto">
-              <input id="test-id" className="form-control width-500-px" type="text" placeholder="Search" aria-label="Search"
-                value={this.state.contextValue}
-                onChange={e => {
-                  this.setState({ contextValue: e.target.value });
-                }}
-              />
-              <button className="btn btn-mdb-color btn-rounded btn-sm my-0 ml-sm-2" type="submit">Search</button>
-            </form>
+            <SearchComponent/>
           </div>
         </nav>
-        <AppContext.Provider value={this.state.contextValue}>
+        <AppContext.Provider>
           <GoldenLayoutComponent
             htmlAttrs={{ style: { height: "90%", width: "100%" } }}
             config={{
