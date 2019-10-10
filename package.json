@@ -11,6 +11,7 @@
     "@elastic/react-search-ui": "^1.2.0",
     "@elastic/search-ui-app-search-connector": "^1.2.0",
     "braces": "^3.0.2",
+    "chart.js": "^2.8.0",
     "eslint": "^5.16.0",
     "golden-layout": "1.5.9",
     "jquery": "^3.4.0",

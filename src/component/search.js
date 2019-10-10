@@ -6,7 +6,7 @@ import $ from "jquery"
 import basicSearch from "../api/basic-search";
 
 // Component
-import CheckboxComponent from "../component/checkbox"
+import BarchartComponent from "../component/barchart"
 import ResultComponent from "../component/result"
 
 export default class SearchComponent extends React.Component{
@@ -30,7 +30,7 @@ export default class SearchComponent extends React.Component{
     ReactDOM.unmountComponentAtNode(document.getElementById('result-panel'))
     basicSearch(this.state.value).then(function(response){
       if (!response.success){
-        alert(response.result.error)
+        alert("error")
         return
       }
       let srch_result = response.result.body.hits.hits
@@ -38,18 +38,7 @@ export default class SearchComponent extends React.Component{
       ReactDOM.render(
         <div>
           <h3 className="text-left ml-3">Years</h3>
-          {
-            aggr_result.map((value, index) => {
-              return (
-                <CheckboxComponent
-                  className="ml-5"
-                  name={value.key}
-                  number={value.doc_count}
-                  id={"checkbox" + index}
-                />
-              )
-            })
-          }
+          <BarchartComponent id="barchart-div" className="ml-5 barchart" data={aggr_result.reverse()} />
         </div>
         , document.getElementById('filter-panel')
       )
