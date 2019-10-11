@@ -49,6 +49,7 @@ export default class SearchComponent extends React.Component{
             srch_result.map((value, index) => {
               return (
                 <ResultComponent
+                  key={index}
                   className="ml-5"
                   data={value._source}
                 />
@@ -58,7 +59,12 @@ export default class SearchComponent extends React.Component{
         </div>
         , document.getElementById('result-panel')
       )
-    }).then($("#overlay").hide())
+    }).catch((e) => {
+      alert(e)
+      return
+    }).finally(() => {
+      $("#overlay").hide()
+    })
   }
 
   render() {
