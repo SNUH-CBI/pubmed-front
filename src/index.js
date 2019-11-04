@@ -2,11 +2,40 @@ import React from "react";
 import { render } from "react-dom";
 import $ from "jquery"
 
+import BarchartComponent from "./component/barchart"
 import SearchComponent from "./component/search"
+import SubjectComponent from "./component/subject"
+import ResultComponent from "./component/result"
+
+// API
+import basicSearch from "./api/basic-search"
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state={
+      BarchartData: [],
+      ResultData: [],
+      SubjectData: [],
+    }
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
   componentDidMount(){
     $("#overlay").hide()
+  }
+
+  handleSubmit(event, search_str){
+    event.preventDefault()
+    basicSearch(search_str).then((response) => {
+      if (!response.success){
+        alert("error")
+        return
+      }
+      this.setState({
+        BarchartData: response.result.body.aggregations.group_by_state.buckets.reverse(),
+        ResultData: response.result.body.hits.hits,
+      })
+    })
   }
 
   render() {
@@ -15,11 +44,12 @@ class App extends React.Component {
         <nav className="navbar navbar-expand-lg navbar-dark blue lighten-2 mb-4">
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <a className="navbar-brand" href="/">Pubmed search</a>
-            <SearchComponent/>
+            <SearchComponent onSubmit={this.handleSubmit} />
           </div>
         </nav>
-        <div id="filter-panel"></div>
-        <div id="result-panel"></div>
+        <BarchartComponent data={this.state.BarchartData}/>
+        <SubjectComponent data={this.state.SubjectData}/>
+        <ResultComponent data={this.state.ResultData}/>
       </div>
     );
   }
