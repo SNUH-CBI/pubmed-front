@@ -17,25 +17,34 @@ function setBgColor(_chart, _color, _index=-1){
 }
 
 export default class BarChartComponent extends React.Component{
-  chartRef = React.createRef();
-  state = {
-    length: this.props.data.length,
-    labels: this.props.data.map((value, key) => {return value.key}),
-    values: this.props.data.map((value, key) => {return value.doc_count}),
-    click: { on: false, index: -1, year: -1 },
-    totalPub: 0
-  } 
-  componentDidMount() {
-    const myChartRef = this.chartRef.current.getContext("2d")
-    let chart = new Chart(myChartRef, {
+  constructor(props){
+    super(props)
+    this.chartRef = React.createRef()
+    this.state = {
+      chart: null,
+      click: { on: false, index: -1, year: -1 },
+      totalPub: 0
+    }
+  }
+
+  getChart = (props, ref) => {
+    let state = {
+      chartObj: null,
+
+      length: props.data.length,
+      labels: props.data.map((value, key) => {return value.key}),
+      values: props.data.map((value, key) => {return value.doc_count}),
+    }
+    if (this.state.chart) this.state.chart.destroy()
+    let chart = new Chart(ref, {
       type: 'bar',
       data: {
-        labels: this.state.labels,
+        labels: state.labels,
         datasets: [
           {
-            backgroundColor: Array(this.state.length).fill(blue),
-				    borderColor: blue,
-            data: this.state.values
+            backgroundColor: Array(state.length).fill(blue),
+          borderColor: blue,
+            data: state.values
           }
         ]
       },
@@ -47,13 +56,13 @@ export default class BarChartComponent extends React.Component{
           if (!this.state.click.on && item[0]){
             let [index, year] = [item[0]._index, item[0]._view.label]
 
-            setBgColor(chart, Array(this.state.length).fill(transBlue))
+            setBgColor(chart, Array(state.length).fill(transBlue))
             this.setState({ click: {
                 on: true,
                 index: index,
                 year: year,
               },
-              totalPub: this.state.values[index]
+              totalPub: state.values[index]
             })
             setBgColor(chart, blue, index)
 
@@ -69,9 +78,9 @@ export default class BarChartComponent extends React.Component{
             let [from, to] = [this.state.click.index, _index].sort()
             let total = 0
 
-            setBgColor(chart, Array(this.state.length).fill(transBlue))
+            setBgColor(chart, Array(state.length).fill(transBlue))
             for (let i = from; i <= to; i++){
-              total += this.state.values[i]
+              total += state.values[i]
               setBgColor(chart, blue, i)
             }
             this.setState({ totalPub: total })
@@ -97,11 +106,29 @@ export default class BarChartComponent extends React.Component{
         }
       }
     })
+    this.setState({chart: chart})
   }
+
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      chart: null,
+      click: { on: false, index: -1, year: -1 },
+      totalPub: 0
+    })
+    this.getChart(newProps, this.chartRef.current.getContext("2d"))
+  }
+
+  componentDidMount() {
+    this.getChart(this.props, this.chartRef.current.getContext("2d"))
+  }
+
   render(){
     return (
-      <div className={this.props.className}>
-        <canvas id="barChart" ref={ this.chartRef } />
+      <div>
+        <h3 className="text-left ml-3">Years</h3>
+        <div id="barchart-div" className="barchart basic-margin">
+          <canvas id="barChart" ref={ this.chartRef } />
+        </div>
         <FilterComponent />
       </div>
     )

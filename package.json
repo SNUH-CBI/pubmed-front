@@ -1,9 +1,9 @@
 {
-  "name": "goldenlayout-react-rortals",
+  "name": "pubmed-visualization",
   "version": "1.0.0",
-  "description": "https://github.com/golden-layout/golden-layout/issues/392#issuecomment-384731510",
+  "description": "visualization for searching pubmed",
   "keywords": [
-    "golden-layout"
+    "visualization"
   ],
   "main": "src/index.js",
   "dependencies": {
@@ -12,8 +12,8 @@
     "@elastic/search-ui-app-search-connector": "^1.2.0",
     "braces": "^3.0.2",
     "chart.js": "^2.8.0",
+    "d3": "^4.10.0",
     "eslint": "^5.16.0",
-    "golden-layout": "1.5.9",
     "jquery": "^3.4.0",
     "js-yaml": "^3.13.1",
     "mem": "^5.1.1",

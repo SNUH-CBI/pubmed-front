@@ -119,9 +119,16 @@ p.thicker {
 }
 
 .barchart {
-  height: 80%;
+  height: 300px;
+}
+
+.basic-margin {
   margin-left: 50px;
   margin-right: 50px;
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+#filter-panel {
+  height: 500px;
 }
