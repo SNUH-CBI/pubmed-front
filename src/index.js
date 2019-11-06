@@ -4,11 +4,12 @@ import $ from "jquery"
 
 import BarchartComponent from "./component/barchart"
 import SearchComponent from "./component/search"
-import SubjectComponent from "./component/subject"
 import ResultComponent from "./component/result"
+import KeywordComponent from './component/keyword'
 
 // API
 import basicSearch from "./api/basic-search"
+import keywordSearch from "./api/keyword-search"
 
 class App extends React.Component {
   constructor(props) {
@@ -36,6 +37,13 @@ class App extends React.Component {
         ResultData: response.result.body.hits.hits,
       })
     })
+    keywordSearch(search_str).then((response) => {
+      if(!response.success){
+        alert("error")
+        return
+      }
+      this.setState({ SubjectData: response })
+    })
   }
 
   render() {
@@ -48,7 +56,7 @@ class App extends React.Component {
           </div>
         </nav>
         <BarchartComponent data={this.state.BarchartData}/>
-        <SubjectComponent data={this.state.SubjectData}/>
+        <KeywordComponent data={this.state.SubjectData}/>
         <ResultComponent data={this.state.ResultData}/>
       </div>
     );
