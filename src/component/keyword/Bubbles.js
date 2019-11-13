@@ -5,46 +5,6 @@ import tooltip from './Tooltip'
 
 import './Bubbles.css'
 
-const genSlideStyle = (value) => {
-  return {
-    point: {
-      left: `calc(${value * 20}% - ${5 + 3 * value}px)`,
-    },
-    range: {
-      width: `${value * 20}%`,
-    },
-  };
-};
-
-class RangeSlider extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      value: 2019,
-    }
-  }
-  
-  handleChange = (e) => {
-    this.setState({ value: e.target.value });
-    this.props.onChange(e)
-  }
-  
-  render () {
-    const slideStyle = genSlideStyle(this.state.value);
-    return (
-      <div className="range">
-        <span className="range-value" style={slideStyle.range} />
-        <span className="circle" style={slideStyle.point} />
-        <input
-          className="range-slide" name="range" type="range"
-          min="2015" max="2019" step="1"
-          value={this.state.value} onChange={this.handleChange}
-        />
-      </div>
-    );
-  }
-}
-
 export default class Bubbles extends React.Component {
   constructor(props) {
     super(props)
@@ -60,7 +20,6 @@ export default class Bubbles extends React.Component {
 
   state = {
     g: null,
-    year: 2019,
     bubbles: null
   }
 
@@ -81,13 +40,12 @@ export default class Bubbles extends React.Component {
   }
 
   charge(d) {
-    return -this.props.forceStrength * (d.radius[this.state.year] ** 2.0)
+    return -this.props.forceStrength * (d.radius[this.props.year] ** 2.0)
   }
 
-  updateBubbles = (data) => {
-    this.setState({ year: data.target.value })
+  updateBubbles = () => {
     this.state.bubbles
-      .transition().duration(500).attr('r', d => d.radius[data.target.value]).on('end', () => {
+      .transition().duration(500).attr('r', d => d.radius[this.props.year]).on('end', () => {
         this.simulation.nodes(this.props.data)
         .alpha(1)
         .restart()
@@ -114,11 +72,11 @@ export default class Bubbles extends React.Component {
       })
       .attr('stroke', d => d3.rgb(d.color).darker())
       .attr('stroke-width', 2)
-      .on('mouseover', d => showDetail(d, this.state.year))  // eslint-disable-line
+      .on('mouseover', d => showDetail(d, this.props.year))  // eslint-disable-line
       .on('mouseout', hideDetail) // eslint-disable-line
 
     this.setState({ bubbles: bubblesE })
-    bubblesE.transition().duration(500).attr('r', d => d.radius[this.state.year]).on('end', () => {
+    bubblesE.transition().duration(500).attr('r', d => d.radius[this.props.year]).on('end', () => {
       this.simulation.nodes(data)
       .alpha(1)
       .restart()
@@ -129,8 +87,6 @@ export default class Bubbles extends React.Component {
     const { width, height } = this.props
     return (
       <div>
-        <h1>{ this.state.year }</h1>
-        <RangeSlider onChange={this.updateBubbles}/>
         <svg className="bubbleChart" width={width} height={height}>
           <g ref={this.onRef} className="bubbles" />
         </svg>
