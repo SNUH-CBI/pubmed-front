@@ -10,6 +10,7 @@ import KeywordComponent from './component/keyword'
 // API
 import basicSearch from "./api/basic-search"
 import keywordSearch from "./api/keyword-search"
+import MapComponent from "./component/map";
 
 class App extends React.Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class App extends React.Component {
       BarchartData: [],
       ResultData: [],
       SubjectData: [],
+      MapData: {}
     }
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -44,6 +46,11 @@ class App extends React.Component {
       }
       this.setState({ SubjectData: response })
     })
+    this.setState({MapData: {
+      AF: 16.63,
+      AL: 11.58,
+      DZ: 158.97
+    }})
   }
 
   render() {
@@ -57,6 +64,7 @@ class App extends React.Component {
         </nav>
         <BarchartComponent data={this.state.BarchartData}/>
         <KeywordComponent data={this.state.SubjectData}/>
+        <MapComponent data={this.state.MapData}/>
         <ResultComponent data={this.state.ResultData}/>
       </div>
     );
