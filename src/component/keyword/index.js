@@ -51,12 +51,11 @@ export default class KeywordComponent extends React.Component {
   }
 
   render() {
-    const year = this.state.year;
     return (
       <div className="Keyword">
         <h3 className="text-left ml-3">Keywords</h3>
         <h1>{ this.state.year }</h1>
-        <Lines ref="Lines" width={960} height={480} data={this.state.data} onHandleYearChange={this.handleYearChange} year={this.state.year}/>
+        <Lines ref="Lines" data={this.state.data} onHandleYearChange={this.handleYearChange} year={this.state.year}/>
         <Bubbles ref="bubbles" width={960} height={480} data={this.state.data} forceStrength={0.03} center={{x: 480, y: 240}} onHandleYearChange={this.handleYearChange} year={this.state.year}/>
       </div>
     )

@@ -3,52 +3,35 @@ import React from 'react';
 import 'chartjs-plugin-annotation'
 import 'chartjs-plugin-draggable'
 
-
-function makeDataset(data, index) {
-  let indexno = -1
-  if (data.length !== 0) {
-    indexno = index - 2021 + Object.keys(data[0].value).length
-  }
-  let arr = data.map((elem) => {
-    return {
-      label: elem.name,
-      data: Object.values((({ key, ...others }) => ({ ...others }))(elem.value)),
-      borderColor: elem.color,
-      fill: false,
-    }
-  })
-    .sort(function (a, b) {
-      if (a.data[indexno] > b.data[indexno]) return 1;
-      if (a.data[indexno] < b.data[indexno]) return -1;
-      return 0;
-    })
-    .splice(-5, 5)
-
-  return arr
-}
-
 class Lines extends React.Component {
   state = {
     chart: null,
-    pos: 2017
+    pos: 2017,
+    datasets: null,
   }
 
-  componentWillReceiveProps(newProps) {
-    if (newProps.data.length !== 0) {
-      this.getChart(newProps)
-    }
+  componentDidUpdate(prevProps) {
+    console.log(prevProps)
+    if (this.props.year !== prevProps.year || this.props.data !== prevProps.data)
+      this.updateLine()
+  }
+
+  componentDidMount() {
+    this.getChart(this.props)
   }
 
   getChart = (props) => {
     let ctx = document.getElementById('lineChart').getContext('2d');
     if (this.state.chart) this.state.chart.destroy()
+
     let chart = new Chart(ctx, {
       type: 'line',
       data: {
         labels: [2015, 2016, 2017, 2018, 2019],
-        datasets: makeDataset(props.data, this.props.year).filter(a => !!a),
+        datasets: this.state.datasets,
       },
       options: {
+        animation: false,
         scales: {
           xAxes: [{
             id: 'x-axis-0',
@@ -67,7 +50,7 @@ class Lines extends React.Component {
             type: 'linear',
             display: false,
           }
-        ]
+          ]
         },
         maintainAspectRatio: false,
         annotation: {
@@ -84,11 +67,10 @@ class Lines extends React.Component {
             borderWidth: 5,
             draggable: true,
             onDrag: (e) => {
-              this.setState({pos: e.subject.config.value})
+              this.setState({ pos: e.subject.config.value })
             },
             onDragEnd: (e) => {
               this.props.onHandleYearChange(Math.round(e.subject.config.value))
-              this.setState({pos: Math.round(e.subject.config.value)})
             }
           }]
         }
@@ -101,14 +83,34 @@ class Lines extends React.Component {
   }
 
   updateLine = () => {
-    this.state.chart.update()
+    let indexno = -1
+    if (this.props.data.length !== 0) {
+      indexno = this.props.year - 2021 + Object.keys(this.props.data[0].value).length
+    }
+    this.setState({
+      datasets: this.props.data.map((elem) => {
+        return {
+          label: elem.name,
+          data: Object.values((({ key, ...others }) => ({ ...others }))(elem.value)),
+          borderColor: elem.color,
+          fill: false,
+        }
+      })
+        .sort(function (a, b) {
+          if (a.data[indexno] > b.data[indexno]) return 1;
+          if (a.data[indexno] < b.data[indexno]) return -1;
+          return 0;
+        })
+        .splice(-5, 5)
+    },
+      () => this.setState({ pos: this.props.year },
+        () => this.setState({ chart: this.getChart(this.props) })))
   }
 
   render() {
-    const { width, height } = this.props
     return (
       <div id="lineChart-div" className="basic-margin">
-        <canvas id="lineChart" width={width} height={height} />
+        <canvas id="lineChart" width='960' height='480' />
       </div>
     )
   }
