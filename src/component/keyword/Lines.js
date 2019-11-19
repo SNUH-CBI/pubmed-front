@@ -54,7 +54,7 @@ class Lines extends React.Component {
         maintainAspectRatio: false,
         annotation: {
           drawTime: 'afterDraw',
-          events: ['click'],
+          events: ['click', 'mouseover'],
           annotations: [{
             drawTime: 'afterDraw',
             id: 'verticalLine',
@@ -70,6 +70,14 @@ class Lines extends React.Component {
             },
             onDragEnd: (e) => {
               this.props.onHandleYearChange(Math.round(e.subject.config.value))
+            },
+            onMouseover: function(e) {
+              this.options.borderColor = "black"
+              this.chartInstance.update()
+            },
+            onMouseout: function(e) {
+              this.options.borderColor = "grey"
+              this.chartInstance.update()
             }
           }]
         }
