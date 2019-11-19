@@ -11,7 +11,6 @@ class Lines extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log(prevProps)
     if (this.props.year !== prevProps.year || this.props.data !== prevProps.data)
       this.updateLine()
   }
@@ -94,6 +93,7 @@ class Lines extends React.Component {
           data: Object.values((({ key, ...others }) => ({ ...others }))(elem.value)),
           borderColor: elem.color,
           fill: false,
+          lineTension: 0,
         }
       })
         .sort(function (a, b) {
@@ -104,7 +104,7 @@ class Lines extends React.Component {
         .splice(-5, 5)
     },
       () => this.setState({ pos: this.props.year },
-        () => this.setState({ chart: this.getChart(this.props) })))
+        () => this.getChart(this.props)))
   }
 
   render() {
