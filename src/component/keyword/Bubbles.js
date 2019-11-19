@@ -56,6 +56,7 @@ export default class Bubbles extends React.Component {
     if (!this.state.g) return
     this.state.g.selectAll('.bubble').remove()
     const bubbles = this.state.g.selectAll('.bubble').data(data, d => d.id)
+    let color = d3.scaleOrdinal(d3.schemeCategory20)
 
     // Exit
     bubbles.exit().remove()
@@ -66,8 +67,10 @@ export default class Bubbles extends React.Component {
       .attr('r', 0)
       .attr('cx', d => d.x)
       .attr('cy', d => d.y)
-      .attr('fill', d => {
-        d.color = fillColor()
+      .attr('fill', (d,i) => {
+        console.log(i)
+        if(i<20) d.color = color(i).toString()
+        else d.color = 'grey'
         return d.color
       })
       .attr('stroke', d => d3.rgb(d.color).darker())
