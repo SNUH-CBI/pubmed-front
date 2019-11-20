@@ -31,6 +31,9 @@ export default class MapComponent extends React.Component {
             containerStyle={{ width: '100%', height: '100%' }}
             containerClassName="map"
             series={this.mapSeries}
+            onRegionTipShow={(e, el, code) => {
+              el.html(el.html()+' Number : ' + this.props.data[code])
+            }}
           />
         </div>
       </div>
