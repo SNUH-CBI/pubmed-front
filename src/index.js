@@ -6,10 +6,13 @@ import BarchartComponent from "./component/barchart"
 import SearchComponent from "./component/search"
 import ResultComponent from "./component/result"
 import KeywordComponent from './component/keyword'
+import AuthorComponent from './component/author'
+import JournalComponent from './component/journal'
 
 // API
 import basicSearch from "./api/basic-search"
 import keywordSearch from "./api/keyword-search"
+import MapComponent from "./component/map";
 
 class App extends React.Component {
   constructor(props) {
@@ -18,6 +21,9 @@ class App extends React.Component {
       BarchartData: [],
       ResultData: [],
       SubjectData: [],
+      MapData: {},
+      JournalData: [],
+      AuthorData: []
     }
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -44,6 +50,11 @@ class App extends React.Component {
       }
       this.setState({ SubjectData: response })
     })
+    this.setState({MapData: {
+      AF: 16.63,
+      AL: 11.58,
+      DZ: 158.97
+    }})
   }
 
   render() {
@@ -57,6 +68,9 @@ class App extends React.Component {
         </nav>
         <BarchartComponent data={this.state.BarchartData}/>
         <KeywordComponent data={this.state.SubjectData}/>
+        <MapComponent data={this.state.MapData}/>
+        <AuthorComponent data={this.state.AuthorData}/>
+        <JournalComponent data={this.state.JournalData}/>
         <ResultComponent data={this.state.ResultData}/>
       </div>
     );
