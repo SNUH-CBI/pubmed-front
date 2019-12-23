@@ -1,6 +1,6 @@
 // api/keyword-search.js
 export default async function keywordSearch(search_str) {
-  const url =  "http://172.23.131.62:4000/keyword?text=" + search_str
+  const url =  "http://210.117.211.208:41002/keyword?text=" + search_str + "&impactFactor=0";
 
   let res = await fetch(url, {
     method: 'GET',
