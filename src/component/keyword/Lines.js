@@ -30,7 +30,7 @@ function makeDataset(data, index) {
 class Lines extends React.Component {
   state = {
     chart: null,
-    pos: 2017
+    pos: 0
   }
 
   componentWillReceiveProps(newProps) {
@@ -42,27 +42,29 @@ class Lines extends React.Component {
   getChart = (props) => {
     let ctx = document.getElementById('lineChart').getContext('2d');
     if (this.state.chart) this.state.chart.destroy()
+    const years = props.years
     let chart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: [2015, 2016, 2017, 2018, 2019],
+        labels: years,
         datasets: makeDataset(props.data, this.props.year).filter(a => !!a),
       },
       options: {
+        animation: false,
         scales: {
           xAxes: [{
             id: 'x-axis-0',
             ticks: {
-              max: 2019,
-              min: 2015,
+              max: years[years.length - 1],
+              min: years[0],
               stepSize: 1
             }
           },
           {
             id: 'x-for-line',
             ticks: {
-              max: 2019,
-              min: 2015
+              max: years[years.length - 1],
+              min: years[0]
             },
             type: 'linear',
             display: false,
@@ -97,7 +99,7 @@ class Lines extends React.Component {
         mode: 'index',
       }
     })
-    this.setState({ chart: chart })
+    this.setState({ chart: chart, pos: props.year })
   }
 
   updateLine = () => {

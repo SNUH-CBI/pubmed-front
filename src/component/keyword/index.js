@@ -42,12 +42,18 @@ export default class KeywordComponent extends React.Component {
 
   async componentWillReceiveProps(nextProps) {
     if (nextProps.data !== this.props.data) {
-      this.setState({data: createNodes(await receiveProps(nextProps.data))})
+      this.setState({
+        years: nextProps.data.year,
+        data: createNodes(await receiveProps(nextProps.data))
+      })
     }
   }
 
   componentDidMount() {
-    this.setState({data: createNodes(this.props.data)})
+    this.setState({
+      years: this.props.data.year, 
+      data: createNodes(this.props.data)
+    })
   }
 
   render() {
@@ -56,8 +62,21 @@ export default class KeywordComponent extends React.Component {
       <div className="Keyword">
         <h3 className="text-left ml-3">Keywords</h3>
         <h1>{ this.state.year }</h1>
-        <Lines ref="Lines" width={960} height={480} data={this.state.data} onHandleYearChange={this.handleYearChange} year={this.state.year}/>
-        <Bubbles ref="bubbles" width={960} height={480} data={this.state.data} forceStrength={0.03} center={{x: 480, y: 240}} onHandleYearChange={this.handleYearChange} year={this.state.year}/>
+        <Lines
+          ref="Lines"
+          width={960} height={480}
+          data={this.state.data}
+          onHandleYearChange={this.handleYearChange}
+          years={this.state.years} year={this.state.year}
+        />
+        <Bubbles
+          ref="bubbles"
+          width={960} height={480}
+          data={this.state.data}
+          forceStrength={0.03} center={{x: 480, y: 240}}
+          onHandleYearChange={this.handleYearChange}
+          years={this.state.years} year={this.state.year}
+        />
       </div>
     )
   }
