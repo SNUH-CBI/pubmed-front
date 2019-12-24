@@ -24,6 +24,7 @@ export default class KeywordComponent extends React.Component {
     data: [],
     grouping: 'all',
     year: 2017,
+    years: [2017]
   }
 
   handleYearChange = (year) => {
@@ -49,33 +50,24 @@ export default class KeywordComponent extends React.Component {
     }
   }
 
-  componentDidMount() {
-    this.setState({
-      years: this.props.data.year, 
-      data: createNodes(this.props.data)
-    })
-  }
-
   render() {
-    const year = this.state.year;
+    const {data, years, year} = this.state;
     return (
       <div className="Keyword">
         <h3 className="text-left ml-3">Keywords</h3>
-        <h1>{ this.state.year }</h1>
+        <h1>{ year }</h1>
         <Lines
           ref="Lines"
           width={960} height={480}
-          data={this.state.data}
-          onHandleYearChange={this.handleYearChange}
-          years={this.state.years} year={this.state.year}
+          data={data} onHandleYearChange={this.handleYearChange}
+          years={years} year={year}
         />
         <Bubbles
           ref="bubbles"
           width={960} height={480}
-          data={this.state.data}
+          data={data} onHandleYearChange={this.handleYearChange}
           forceStrength={0.03} center={{x: 480, y: 240}}
-          onHandleYearChange={this.handleYearChange}
-          years={this.state.years} year={this.state.year}
+          years={years} year={year}
         />
       </div>
     )

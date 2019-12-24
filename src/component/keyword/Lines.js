@@ -3,40 +3,20 @@ import React from 'react';
 import 'chartjs-plugin-annotation'
 import 'chartjs-plugin-draggable'
 
-
-function makeDataset(data, index) {
-  let indexno = -1
-  if (data.length !== 0) {
-    indexno = index - 2021 + Object.keys(data[0].value).length
-  }
-  let arr = data.map((elem) => {
-    return {
-      label: elem.name,
-      data: Object.values((({ key, ...others }) => ({ ...others }))(elem.value)),
-      borderColor: elem.color,
-      fill: false,
-    }
-  })
-    .sort(function (a, b) {
-      if (a.data[indexno] > b.data[indexno]) return 1;
-      if (a.data[indexno] < b.data[indexno]) return -1;
-      return 0;
-    })
-    .splice(-5, 5)
-
-  return arr
-}
-
 class Lines extends React.Component {
   state = {
     chart: null,
-    pos: 0
+    pos: 0,
+    datasets: null
   }
 
-  componentWillReceiveProps(newProps) {
-    if (newProps.data.length !== 0) {
-      this.getChart(newProps)
-    }
+  componentDidUpdate(prevProps) {
+    if (this.props.year !== prevProps.year || this.props.data !== prevProps.data)
+      this.updateLine()
+  }
+
+  componentDidMount() {
+    this.getChart(this.props)
   }
 
   getChart = (props) => {
@@ -47,7 +27,7 @@ class Lines extends React.Component {
       type: 'line',
       data: {
         labels: years,
-        datasets: makeDataset(props.data, this.props.year).filter(a => !!a),
+        datasets: this.state.datasets,
       },
       options: {
         animation: false,
@@ -74,7 +54,7 @@ class Lines extends React.Component {
         maintainAspectRatio: false,
         annotation: {
           drawTime: 'afterDraw',
-          events: ['click'],
+          events: ['click', 'mouseover'],
           annotations: [{
             drawTime: 'afterDraw',
             id: 'verticalLine',
@@ -86,11 +66,18 @@ class Lines extends React.Component {
             borderWidth: 5,
             draggable: true,
             onDrag: (e) => {
-              this.setState({pos: e.subject.config.value})
+              this.setState({ pos: e.subject.config.value })
             },
             onDragEnd: (e) => {
               this.props.onHandleYearChange(Math.round(e.subject.config.value))
-              this.setState({pos: Math.round(e.subject.config.value)})
+            },
+            onMouseover: function(e) {
+              this.options.borderColor = "black"
+              this.chartInstance.update()
+            },
+            onMouseout: function(e) {
+              this.options.borderColor = "grey"
+              this.chartInstance.update()
             }
           }]
         }
@@ -103,7 +90,29 @@ class Lines extends React.Component {
   }
 
   updateLine = () => {
-    this.state.chart.update()
+    let indexno = -1
+    if (this.props.data.length !== 0) {
+      indexno = this.props.years.indexOf(this.props.year)
+    }
+    this.setState({
+      datasets: this.props.data.map((elem) => {
+        return {
+          label: elem.name,
+          data: Object.values((({ key, ...others }) => ({ ...others }))(elem.value)),
+          borderColor: elem.color,
+          fill: false,
+          lineTension: 0,
+        }
+      })
+        .sort(function (a, b) {
+          if (a.data[indexno] > b.data[indexno]) return 1;
+          if (a.data[indexno] < b.data[indexno]) return -1;
+          return 0;
+        })
+        .splice(-5, 5)
+    },
+    () => this.setState({ pos: this.props.year },
+    () => this.getChart(this.props)))
   }
 
   render() {

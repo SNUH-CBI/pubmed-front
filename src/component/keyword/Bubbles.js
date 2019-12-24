@@ -1,6 +1,5 @@
 import React from 'react'
 import * as d3 from 'd3'
-import { fillColor } from './utils'
 import tooltip from './Tooltip'
 
 import './Bubbles.css'
@@ -56,6 +55,7 @@ export default class Bubbles extends React.Component {
     if (!this.state.g) return
     this.state.g.selectAll('.bubble').remove()
     const bubbles = this.state.g.selectAll('.bubble').data(data, d => d.id)
+    const color = d3.scaleOrdinal(d3.schemeCategory20)
 
     // Exit
     bubbles.exit().remove()
@@ -66,8 +66,8 @@ export default class Bubbles extends React.Component {
       .attr('r', 0)
       .attr('cx', d => d.x)
       .attr('cy', d => d.y)
-      .attr('fill', d => {
-        d.color = fillColor()
+      .attr('fill', (d,i) => {
+        d.color = color(i).toString()
         return d.color
       })
       .attr('stroke', d => d3.rgb(d.color).darker())
