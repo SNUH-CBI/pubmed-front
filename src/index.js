@@ -8,11 +8,12 @@ import ResultComponent from "./component/result"
 import KeywordComponent from './component/keyword'
 import AuthorComponent from './component/author'
 import JournalComponent from './component/journal'
+import MapComponent from "./component/map";
 
 // API
 import basicSearch from "./api/basic-search"
 import keywordSearch from "./api/keyword-search"
-import MapComponent from "./component/map";
+import mapSearch from "./api/map-search";
 
 class App extends React.Component {
   constructor(props) {
@@ -50,11 +51,14 @@ class App extends React.Component {
       }
       this.setState({ SubjectData: response })
     })
-    this.setState({MapData: {
-      AF: 16.63,
-      AL: 11.58,
-      DZ: 158.97
-    }})
+    mapSearch(search_str).then((response) => {
+      if(!response.success){
+        alert("error")
+        return
+      }
+      const mapped = response.result.map(item => ({ [item.abbr]: item.count }))
+      this.setState({MapData: Object.assign({}, ...mapped )})
+    })
   }
 
   render() {
