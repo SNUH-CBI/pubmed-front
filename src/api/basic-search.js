@@ -1,5 +1,5 @@
 // api/basic-search.js
-export default async function basicSearch(search_str) {
+async function basicSearch(search_str) {
   const url =  "http://210.117.211.208:41002/basic-search?string=" + search_str
 
   let res = await fetch(url, {
@@ -10,5 +10,12 @@ export default async function basicSearch(search_str) {
     return response.json();
   })
 
-  return res;
+  return res
+}
+
+export default function basicUpdate(value){
+  basicSearch(value).then((response) => {
+      console.log(response.result.body.aggregations.group_by_state.buckets.reverse());
+      return response.result.body.aggregations.group_by_state.buckets.reverse();
+  });
 }

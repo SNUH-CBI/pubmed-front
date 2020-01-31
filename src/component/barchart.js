@@ -1,8 +1,6 @@
 import React from 'react';
 import Chart from 'chart.js';
 
-import FilterComponent from '../component/filter'
-
 const red = "rgb(255, 99, 132)"
 const transRed = Chart.helpers.color(red).alpha(0.4).rgbString()
 
@@ -129,7 +127,6 @@ export default class BarChartComponent extends React.Component{
         <div id="barchart-div" className="barchart basic-margin">
           <canvas id="barChart" ref={ this.chartRef } />
         </div>
-        <FilterComponent />
       </div>
     )
   } 
