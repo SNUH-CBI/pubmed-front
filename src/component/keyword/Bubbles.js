@@ -77,9 +77,7 @@ export default class Bubbles extends React.Component {
 
     this.setState({ bubbles: bubblesE })
     bubblesE.transition().duration(500).attr('r', d => d.radius[this.props.year]).on('end', () => {
-      this.simulation.nodes(data)
-      .alpha(1)
-      .restart()
+      this.simulation.nodes(data).alpha(1).restart();
     })
   }
 

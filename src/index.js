@@ -1,8 +1,10 @@
 import React, { useContext } from "react";
 import { render } from "react-dom";
 
-import YearComponent from "./component/barchart"
-import SearchComponent from "./component/search"
+import SearchComponent from "./component/search";
+import YearComponent from "./component/barchart";
+import KeywordComponent from "./component/keyword";
+import MapComponent from "./component/map";
 
 // Hook
 import { useResult } from './hook/useResult';
@@ -19,9 +21,10 @@ function App(){
         </div>
       </nav>
       <YearComponent data={result.year}/>
+      <KeywordComponent data={result.keyword}/>
+      <MapComponent data={result.map}/>
     </div>
   );
 }
-
 
 render(<App />, document.getElementById("root"));
