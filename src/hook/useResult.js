@@ -12,8 +12,7 @@ export function useResult(){
 
   function initialize(value){
     yearSearch(value).then((response) => {
-      setResult({year: []})
-      // setResult({year: response.result.body.aggregations.group_by_state.buckets.reverse()})
+      setResult({...result, year: response.result.body.aggregations.group_by_state.buckets.reverse()})
     })
   }
 

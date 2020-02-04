@@ -6,15 +6,21 @@ export default class SearchComponent extends React.Component{
     this.state = { value: "" }
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(event) {
     this.setState({value: event.target.value});
   }
 
+  handleSubmit(event){
+    event.preventDefault();
+    this.props.onSubmit(this.state.value);
+  }
+
   render() {
     return(
-      <form className="form-inline mr-auto" onSubmit={(e) => this.props.onSubmit(e, this.state.value)}>
+      <form className="form-inline mr-auto" onSubmit={this.handleSubmit}>
         <input
           id="search-input"
           className="form-control width-500-px"
